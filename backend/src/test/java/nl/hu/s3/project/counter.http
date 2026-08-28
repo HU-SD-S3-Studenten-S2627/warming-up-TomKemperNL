@@ -1,0 +1,10 @@
+GET http://localhost:8080/api/counter
+
+###
+
+POST http://localhost:8080/api/counter
+Content-Type: application/json
+
+{
+  "increment": 1
+}

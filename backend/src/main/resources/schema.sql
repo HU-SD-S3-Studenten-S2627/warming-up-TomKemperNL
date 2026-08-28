@@ -1,0 +1,1 @@
+create table if not exists counter (id serial primary key, current_value bigint);

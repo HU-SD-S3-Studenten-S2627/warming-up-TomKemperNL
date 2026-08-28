@@ -1,0 +1,17 @@
+# Running "docker-compose up" (active process)
+# or "docker-compose start" (background process)
+# will setup our development database
+services:
+  db:
+    image: postgres:18
+    ports:
+      # This means you can connect to 'localhost:15432' from your computer
+      # and it will patch it through to the container-port 5432
+      - "15432:5432"
+    environment:
+      # So the database-superuser is called postgres/admin
+      # The account our application will use is configured in init.sql
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      # Required volume: creates the initial db and user
+      - "./database/mount:/docker-entrypoint-initdb.d"

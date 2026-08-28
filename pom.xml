@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Deze .pom file kun je compleet negeren, de enige reden dat deze er staat is zodat je backend-folder gewoon netjes
+         werkt als je direct deze directory opent in IntelliJ in plaats van de backend folder, of als je dit project
+         direct vanuit IntelliJ 'git clone't.
+
+         (een veel-voorkomende, oninteressante vergissing)
+     -->
+
+    <groupId>nl.hu.s3</groupId>
+    <artifactId>project-parent</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>backend</module>
+        <!--  frontend is een NPM-project, dat werkt gewoon vanuit IntelliJ -->
+    </modules>
+</project>

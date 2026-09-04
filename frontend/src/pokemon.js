@@ -27,3 +27,14 @@ async function updatePokemonList(data){
 
 updatePokemonList(data);
 
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+const container = document.querySelector("#map");
+let coordinates_HL15 = [52.08419050575246, 5.1756441593170175];
+let zoomLevel = 17;
+let map = L.map(container);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+map.setView(coordinates_HL15, zoomLevel);

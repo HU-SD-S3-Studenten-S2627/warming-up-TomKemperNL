@@ -1,6 +1,7 @@
-package nl.hu.s3.project.counter.presentation;
+package nl.hu.s3.project;
 
 import jakarta.ws.rs.ApplicationPath;
+import nl.hu.s3.project.pokemon.PokemonResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -10,6 +11,6 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
-        register(CounterResource.class);
+        register(PokemonResource.class);
     }
 }

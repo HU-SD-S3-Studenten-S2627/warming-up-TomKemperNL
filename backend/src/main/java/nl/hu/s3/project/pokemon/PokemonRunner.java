@@ -10,9 +10,12 @@ public class PokemonRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         PokemonAPI api = new PokemonAPI();
-        List<Pokemon> pokemons = api.getPokemon();
+        List<PokemonLink> pokemons = api.getPokemon();
 
-        for (Pokemon pokemon : pokemons) {
+        for (PokemonLink pokemonLink : pokemons) {
+            Pokemon pokemon = new Pokemon();
+            pokemon.name = pokemonLink.name;
+            pokemon.url = pokemonLink.url;
             pokemon.coordinates = generateRandomCoordinates();
             Pokemon.pokemons.add(pokemon);
         }

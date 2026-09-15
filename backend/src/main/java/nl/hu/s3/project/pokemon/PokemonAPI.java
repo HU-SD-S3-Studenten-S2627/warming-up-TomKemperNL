@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.web.client.RestClient;
 
 public class PokemonAPI {
-    public List<Pokemon> getPokemon() {
+    public List<PokemonLink> getPokemon() {
         RestClient client = RestClient.create("https://pokeapi.co/api/v2");
         PokemonAPIResponse response = client.get().uri("/pokemon").retrieve().body(PokemonAPIResponse.class);
+
         return Arrays.asList(response.results);
     }
 }

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-    private static boolean usePostGres = false;
+    private static boolean usePostGres = true;
 
     public static Connection getConnection() throws SQLException {
         if (usePostGres) {

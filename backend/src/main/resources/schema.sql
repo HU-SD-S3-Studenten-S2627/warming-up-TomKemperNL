@@ -1,1 +1,1 @@
-create table if not exists counter (id serial primary key, current_value bigint);
+create table if not exists pokemon (name varchar(255) primary key, url varchar(255), lat float, lng float);

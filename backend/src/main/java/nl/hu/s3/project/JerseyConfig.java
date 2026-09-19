@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @ApplicationPath("/api")
-@Profile("s2")
 @Configuration
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {

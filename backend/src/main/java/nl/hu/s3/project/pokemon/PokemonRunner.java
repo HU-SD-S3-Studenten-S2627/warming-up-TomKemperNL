@@ -1,8 +1,10 @@
 package nl.hu.s3.project.pokemon;
 
+import nl.hu.s3.project.ConnectionFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
 import java.util.List;
 
 @Component
@@ -12,13 +14,24 @@ public class PokemonRunner implements CommandLineRunner {
         PokemonAPI api = new PokemonAPI();
         List<PokemonLink> pokemons = api.getPokemon();
 
-        for (PokemonLink pokemonLink : pokemons) {
-            Pokemon pokemon = new Pokemon();
-            pokemon.name = pokemonLink.name;
-            pokemon.url = pokemonLink.url;
-            pokemon.coordinates = generateRandomCoordinates();
-            Pokemon.pokemons.add(pokemon);
+
+        try(Connection connection = ConnectionFactory.getConnection()){
+            PokemonDAO dao = new PokemonDAO(connection);
+
+            if(!dao.selectPokemon().isEmpty()){
+                return;
+            }
+
+            for (PokemonLink pokemonLink : pokemons) {
+                Pokemon pokemon = new Pokemon();
+                pokemon.name = pokemonLink.name;
+                pokemon.url = pokemonLink.url;
+                pokemon.coordinates = generateRandomCoordinates();
+
+                dao.insertPokemon(pokemon);
+            }
         }
+
     }
 
     private static final double[] HL15 = new double[]{

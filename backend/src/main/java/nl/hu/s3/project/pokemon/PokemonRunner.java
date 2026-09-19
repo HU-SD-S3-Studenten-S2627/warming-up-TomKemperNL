@@ -1,6 +1,7 @@
 package nl.hu.s3.project.pokemon;
 
 import nl.hu.s3.project.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +10,16 @@ import java.util.List;
 
 @Component
 public class PokemonRunner implements CommandLineRunner {
+    @Autowired
+    private ConnectionFactory connectionFactory;
+
     @Override
     public void run(String... args) throws Exception {
         PokemonAPI api = new PokemonAPI();
         List<PokemonLink> pokemons = api.getPokemon();
 
 
-        try(Connection connection = ConnectionFactory.getConnection()){
+        try(Connection connection = this.connectionFactory.getConnection()){
             PokemonDAO dao = new PokemonDAO(connection);
 
             if(!dao.selectPokemon().isEmpty()){

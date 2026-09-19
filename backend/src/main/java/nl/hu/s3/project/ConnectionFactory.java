@@ -1,17 +1,23 @@
 package nl.hu.s3.project;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Configuration
 public class ConnectionFactory {
-    private static boolean usePostGres = true;
 
-    public static Connection getConnection() throws SQLException {
-        if (usePostGres) {
-            return DriverManager.getConnection("jdbc:postgresql://localhost:15432/hu-s3-project", "hu-s3-project-dbadmin", "hu-s3-project-pwd");
-        }else{
-            return DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
-        }
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+    @Value("${spring.datasource.username}")
+    private String dbUser;
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 }

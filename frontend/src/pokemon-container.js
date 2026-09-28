@@ -1,5 +1,7 @@
-import { LitElement, html } from "lit";
+import {LitElement, html, css} from "lit";
 import {PokemonService} from "./pokemon-service.js";
+
+export const COORDINATES_HL15 = [52.08419050575246, 5.1756441593170175];
 
 class PokemonContainer extends LitElement{
 
@@ -9,6 +11,15 @@ class PokemonContainer extends LitElement{
         pokemon: {type: Array},
         selectedPokemon: {type: Object}
     }
+
+    static styles = [
+        css`
+            :host {
+                display: flex;
+                flex-direction: row;
+            }
+        `
+    ];
 
     constructor() {
         super();
@@ -28,7 +39,10 @@ class PokemonContainer extends LitElement{
     render() {
         return html`
         <pokemon-list .pokemon=${this.pokemon} @select-pokemon=${this.pokemonSelected}></pokemon-list>
-        <pokemon-map @select-pokemon=${this.pokemonSelected}></pokemon-map>
+        <pokemon-map 
+                .pokemon=${this.pokemon}
+                .coordinates=${this.selectedPokemon ? this.selectedPokemon.coordinates : COORDINATES_HL15}
+                @select-pokemon=${this.pokemonSelected}></pokemon-map>
         <pokemon-details .pokemon=${this.selectedPokemon}></pokemon-details>`;
     }
 }

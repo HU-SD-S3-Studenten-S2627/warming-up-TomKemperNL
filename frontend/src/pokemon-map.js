@@ -1,8 +1,15 @@
-import {LitElement, html} from "lit";
+import {LitElement, html, unsafeCSS, css} from "lit";
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import leafletCss from 'leaflet/dist/leaflet.css?inline'
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-export const COORDINATES_HL15 = [52.08419050575246, 5.1756441593170175];
+L.Icon.Default.mergeOptions({
+    iconUrl: markerIcon,
+    iconRetinaUrl: markerIcon2x,
+    shadowUrl: markerShadow,
+});
 
 class PokemonMap extends LitElement {
 
@@ -12,15 +19,25 @@ class PokemonMap extends LitElement {
         coordinates: {type: Array}
     }
 
+    static styles = [
+        css`
+            #map {
+                height: 500px;
+                width: 500px;
+            }
+        `,
+        unsafeCSS(leafletCss)];
+
     constructor() {
         super();
         this.pokemon = [];
         this.zoomLevel = 17;
-        this.coordinates = COORDINATES_HL15;
+        this.coordinates = [];
         this.markers = [];
     }
 
     #addMarker(pokemon) {
+        console.log(pokemon);
         let marker = L.marker(pokemon.coordinates).addTo(this.map);
         this.markers.push(marker);
         marker.addEventListener('click', () => this.dispatchEvent(new CustomEvent('select-pokemon', {detail: {pokemon: pokemon.name}})));
@@ -30,7 +47,7 @@ class PokemonMap extends LitElement {
         if(changedProperties.has('pokemon')) {
             this.markers.forEach(marker => marker.remove());
             this.markers = [];
-            this.pokemon.forEach(pokemon => L.marker(pokemon.coordinates).addTo(this.map));
+            this.pokemon.forEach(pokemon => this.#addMarker(pokemon));
         }
         if(changedProperties.has('coordinates') || changedProperties.has('zoomLevel')) {
             this.map.setView(this.coordinates, this.zoomLevel);

@@ -11,9 +11,13 @@ class PokemonApp extends LitElement {
 
 
     onPokemonSelected(event) {
-        console.log(event.detail.pokemon);
-        console.log('routing to /pokemon/' + event.detail.pokemon)
-        this.router.goto('/pokemon/' + event.detail.pokemon);
+        const path = '/pokemon/' + event.detail.pokemon;
+
+        this.router.goto(path);
+        if(window.location.pathname !== path){
+            window.history.pushState({}, '', path);
+        }
+
     }
 
     render() {

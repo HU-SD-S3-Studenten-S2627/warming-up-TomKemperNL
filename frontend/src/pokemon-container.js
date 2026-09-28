@@ -9,7 +9,8 @@ class PokemonContainer extends LitElement{
 
     static properties = {
         pokemon: {type: Array},
-        selectedPokemon: {type: Object}
+        selectedPokemon: {type: Object},
+        requestedPokemon: {type: String}
     }
 
     static styles = [
@@ -27,13 +28,37 @@ class PokemonContainer extends LitElement{
         this.selectedPokemon = null;
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        console.log('connected container');
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        console.log('disconnected container');
+    }
+
     firstUpdated(_changedProperties) {
         //of de connectedCallback, da's altijd gedoe
-        this.service.getPokemonList().then(pokemon => this.pokemon = pokemon);
+        console.log('first updated container');
+        this.service.getPokemonList().then(pokemon => {
+            this.pokemon = pokemon;
+            if(this.requestedPokemon) this.#selectPokemon(this.requestedPokemon);
+        });
+    }
+
+    updated(changedProperties) {
+        if(changedProperties.has('requestedPokemon')) {
+            this.#selectPokemon(this.requestedPokemon);
+        }
+    }
+
+    #selectPokemon(name){
+        this.service.getPokemon(name).then(pokemon => this.selectedPokemon = pokemon);
     }
 
     pokemonSelected(event) {
-        this.service.getPokemon(event.detail.pokemon).then(pokemon => this.selectedPokemon = pokemon);
+        this.#selectPokemon(event.detail.pokemon);
     }
 
     render() {

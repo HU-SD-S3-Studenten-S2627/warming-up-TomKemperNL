@@ -40,16 +40,21 @@ class PokemonMap extends LitElement {
         console.log(pokemon);
         let marker = L.marker(pokemon.coordinates).addTo(this.map);
         this.markers.push(marker);
-        marker.addEventListener('click', () => this.dispatchEvent(new CustomEvent('select-pokemon', {detail: {pokemon: pokemon.name}})));
+        marker.addEventListener('click', () =>
+            this.dispatchEvent(new CustomEvent('select-pokemon', {
+                detail: {pokemon: pokemon.name},
+                bubbles: true,
+                composed: true
+            })));
     }
 
     updated(changedProperties) {
-        if(changedProperties.has('pokemon')) {
+        if (changedProperties.has('pokemon')) {
             this.markers.forEach(marker => marker.remove());
             this.markers = [];
             this.pokemon.forEach(pokemon => this.#addMarker(pokemon));
         }
-        if(changedProperties.has('coordinates') || changedProperties.has('zoomLevel')) {
+        if (changedProperties.has('coordinates') || changedProperties.has('zoomLevel')) {
             this.map.setView(this.coordinates, this.zoomLevel);
         }
 
@@ -67,13 +72,17 @@ class PokemonMap extends LitElement {
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        if(this.map) this.map.remove();
+        console.log('disconnected map');
+        if (this.map) {
+            console.log('removing map');
+            this.map.remove();
+        }
     }
 
     render() {
         console.log('render')
         return html`
-        <div id="map"></div>`;
+            <div id="map"></div>`;
     }
 }
 

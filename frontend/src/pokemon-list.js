@@ -11,16 +11,11 @@ class PokemonList extends LitElement {
         this.pokemon = [];
     }
 
-    selectPokemon(name) {
-        return e => {
-            this.dispatchEvent(new CustomEvent('select-pokemon', {detail: {pokemon: name}}));
-        }
-    }
-
     render() {
         return html`
             <ul>
-                ${this.pokemon.map(pokemon => html`<li @click=${this.selectPokemon(pokemon.name)}>${pokemon.name}</li>`)}           
+                ${this.pokemon.map(pokemon => html`
+                    <li><a href="/pokemon/${pokemon.name}">${pokemon.name}</li>`)}           
             </ul>
         `;
     }

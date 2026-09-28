@@ -1,6 +1,10 @@
 package nl.hu.s3.project.pokemon;
 
 import nl.hu.s3.project.ConnectionFactory;
+import nl.hu.s3.project.pokemon.api.PokemonAPI;
+import nl.hu.s3.project.pokemon.api.Link;
+import nl.hu.s3.project.pokemon.api.PokemonAPIDetails;
+import nl.hu.s3.project.pokemon.api.StatsDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,8 +20,7 @@ public class PokemonRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         PokemonAPI api = new PokemonAPI();
-        List<PokemonLink> pokemons = api.getPokemon();
-
+        List<Link> pokemons = api.getPokemon(5);
 
         try(Connection connection = this.connectionFactory.getConnection()){
             PokemonDAO dao = new PokemonDAO(connection);
@@ -26,11 +29,31 @@ public class PokemonRunner implements CommandLineRunner {
                 return;
             }
 
-            for (PokemonLink pokemonLink : pokemons) {
-                Pokemon pokemon = new Pokemon();
+            for (Link pokemonLink : pokemons) {
+                PokemonAPIDetails apiDetails = api.getPokemonDetails(pokemonLink.name);
+
+                PokemonDetails pokemon = new PokemonDetails();
                 pokemon.name = pokemonLink.name;
                 pokemon.url = pokemonLink.url;
                 pokemon.coordinates = generateRandomCoordinates();
+                pokemon.imgUrl = apiDetails.sprites.front_default;
+                StatsDetail attackStat = null;
+                StatsDetail defenseStat = null;
+                for(StatsDetail stat : apiDetails.stats){
+                    if(stat.stat.name.equals("attack")){
+                        attackStat = stat;
+                    }
+                    if(stat.stat.name.equals("defense")){
+                        defenseStat = stat;
+                    }
+                }
+                if(attackStat != null){
+                    pokemon.attack = attackStat.base_stat;
+                }
+                if(defenseStat == null){
+                    pokemon.defense = defenseStat.base_stat;
+                }
+
 
                 dao.insertPokemon(pokemon);
             }

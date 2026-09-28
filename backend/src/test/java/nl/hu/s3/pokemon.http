@@ -1,1 +1,5 @@
 GET http://localhost:8080/api/pokemon
+
+###
+
+GET http://localhost:8080/api/pokemon/bulbasaur

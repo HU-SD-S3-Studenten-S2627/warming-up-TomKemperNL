@@ -2,6 +2,7 @@ package nl.hu.s3.project.pokemon;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import nl.hu.s3.project.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +21,17 @@ public class PokemonResource {
         try (Connection connection = this.connectionFactory.getConnection()) {
             PokemonDAO dao = new PokemonDAO(connection);
             return dao.selectPokemon();
+        }
+    }
+
+    @GET
+    @Path("/{name}")
+    public PokemonDetails getPokemon(@PathParam("name") String name){
+        try (Connection connection = this.connectionFactory.getConnection()) {
+            PokemonDAO dao = new PokemonDAO(connection);
+            return dao.selectPokemon(name);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
